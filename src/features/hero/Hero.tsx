@@ -26,14 +26,18 @@ export default function Hero() {
                 <span className="h-1 w-1 rounded-full bg-[#00e6c3] shadow-[0_0_8px_#00e6c3]" />
             </div>
           {/* TITRE */}
-          <h1 className="text-focus-in leading-none">
-            <span className="block text-4xl font-light uppercase tracking-[0.32em] text-white md:text-5xl lg:text-6xl">
-              Tolojanahary
-            </span>
-            <span
-              className="mt-4 block text-5xl font-bold uppercase tracking-[0.28em] text-[#00e6c3] drop-shadow-[0_0_18px_rgba(0,230,195,0.7)] md:text-6xl lg:text-7xl">Stephan
-            </span>
-          </h1>
+          <h1 className="leading-none">
+                <span 
+                    className="block text-4xl font-light uppercase tracking-[0.32em] text-white md:text-5xl lg:text-6xl opacity-0 animate-[fadeSlideUp_0.8s_ease-out_0.1s_forwards]"
+                > 
+                    Tolojanahary 
+                </span> 
+                <span 
+                    className="mt-4 block text-5xl font-bold uppercase tracking-[0.28em] text-[#00e6c3] drop-shadow-[0_0_18px_rgba(0,230,195,0.7)] md:text-6xl lg:text-7xl opacity-0 animate-[fadeSlideUp_0.8s_ease-out_0.4s_forwards]"
+                >
+                    Stephan 
+                </span> 
+            </h1>
 
           {/* SLOGAN */}
           <div className="mt-8 flex items-center gap-4 tracking-in-contract-bck-bottom">

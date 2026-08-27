@@ -55,3 +55,36 @@
     transform: translateX(0);
   }
 }
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+@keyframes letterReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) rotateX(-90deg);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 18px rgba(0,230,195,0.7);
+  }
+  50% {
+    text-shadow: 0 0 32px rgba(0,230,195,1);
+  }
+}
