@@ -40,47 +40,50 @@ export default function Hero() {
             </h1>
 
           {/* SLOGAN */}
-          <div className="mt-8 flex items-center gap-4 tracking-in-contract-bck-bottom">
+          <div className="mt-8 flex items-center gap-10 tracking-in-contract-bck-bottom leading-none">
             <span className="text-lg text-[#00e6c3]">&gt;</span>
-            <span className="text-xs uppercase tracking-[0.4em] text-[#00e6c3]">
+            <span className="text-xs uppercase tracking-[0.4em] text-[#f0ba3b] leading-none">
               Créer
             </span>
             <span className="text-[#00e6c3]">•</span>
-            <span className="text-xs uppercase tracking-[0.4em] text-[#00e6c3]">
+            <span className="text-xs uppercase tracking-[0.4em] text-[#f0ba3b]">
               Concevoir
             </span>
             <span className="text-[#00e6c3]">•</span>
-            <span className="text-xs uppercase tracking-[0.4em] text-[#00e6c3]">
+            <span className="text-xs uppercase tracking-[0.4em] text-[#f0ba3b]">
               Innover
             </span>
           </div>
 
           {/* DESCRIPTION */}
-          <p className="mt-8 max-w-xl text-base leading-7 text-white/60">
-            Développeur Fullstack passionné par la création
-            d’expériences web modernes, performantes et utiles.
-            <br />
-            Je transforme les idées en solutions digitales.
-          </p>
-
+        <p className="tracking-in-contract-bck-bottom leading-none  mt-8 max-w-xl text-base text-white/60 ml-10 ">
+            Étudiant en informatique et développeur Fullstack, je m’intéresse à la
+            conception et au développement d’applications web, mobiles et desktop.
+            <br /><br />
+            J’aime transformer des idées en solutions concrètes, en combinant
+            développement, créativité et technologies modernes. Curieux et toujours
+            en apprentissage, je cherche à construire des applications utiles,
+            performantes et adaptées aux besoins de leurs utilisateurs.
+        </p>
           {/* BOUTON */}
-          <button
-            className="
-              mt-10 rounded-full
-              border border-[#d8e1e0]
-              px-8 py-4
-              text-sm font-medium uppercase
-              tracking-[0.2em]
-              text-white
-              transition-all duration-300
-              hover:bg-[#00e6c3]
-              hover:text-black
-              hover:shadow-[0_0_30px_rgba(0,230,195,0.4)]
-            "
-          >
-            Voir mes projets
-            <span className="ml-4">→</span>
-          </button>
+         <div className="tracking-in-contract-bck-bottom mt-10 flex flex-wrap items-center gap-4">
+                <a
+                    href="#projects"
+                    className="inline-flex items-center gap-4 rounded-full border border-[#d8e1e0] px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-[#00e6c3] hover:text-black hover:shadow-[0_0_30px_rgba(0,230,195,0.4)]"
+                >
+                    Voir mes projets
+                    <span>→</span>
+                </a>
+
+                <a
+                    href="/CV Tolojanahary Stephan.pdf"
+                    download
+                    className="inline-flex items-center gap-4 rounded-full border border-[#00e6c3]/50 px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] text-[#00e6c3] transition-all duration-300 hover:bg-[#00e6c3] hover:text-black hover:shadow-[0_0_30px_rgba(0,230,195,0.4)] hover:scale-105 hover:border-[#00e6c3]">
+                    Télécharger mon CV
+                    <span>↓</span>
+                </a>
+            </div>
+          
 
         </div>
       </div>

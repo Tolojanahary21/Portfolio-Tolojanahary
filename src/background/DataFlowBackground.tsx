@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/immutability */
 /* eslint-disable react-hooks/purity */
 "use client";
@@ -7,14 +8,14 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
  
 function ParticleSphere() {
-  const pointsRef = useRef();
+  const pointsRef = useRef<THREE.Points | null>(null);
 
   const positions = useMemo(() => {
     const count = 15000;
     const array = new Float32Array(count * 3);
 
     // Génération déterministe
-    const random = (n) => {
+    const random = (n: number) => {
       const x = Math.sin(n * 12.9898) * 43758.5453;
       return x - Math.floor(x);
     };
@@ -284,13 +285,13 @@ function ParticleSphere() {
 ========================================================= */
 
 function AmbientParticles() {
-  const ref = useRef();
+  const ref = useRef<THREE.Mesh | null>(null);
 
   const positions = useMemo(() => {
     const count = 2500;
     const array = new Float32Array(count * 3);
 
-    const random = (n) => {
+    const random = (n: number) => {
       const x =
         Math.sin(n * 78.233) *
         43758.5453;
@@ -376,7 +377,7 @@ function AmbientParticles() {
 ========================================================= */
 
 function OrbitRings() {
-  const group = useRef();
+  const group = useRef<THREE.Group | null>(null);
 
   useFrame((state, delta) => {
     if (!group.current) return;
@@ -484,7 +485,7 @@ function OrbitRings() {
 ========================================================= */
 
 function FloatingObjects() {
-  const group = useRef();
+  const group = useRef<THREE.Group | null>(null);
 
   useFrame((state, delta) => {
     if (!group.current) return;
@@ -580,13 +581,13 @@ function FloatingObjects() {
 ========================================================= */
 
 function GlowOrbs() {
-  const group = useRef();
+  const group = useRef<THREE.Group | null>(null);
 
   useFrame((state) => {
     if (!group.current) return;
 
     group.current.children.forEach(
-      (child, index) => {
+  (child: THREE.Object3D, index: number) => {
         child.position.y +=
           Math.sin(
             state.clock.elapsedTime *
@@ -702,41 +703,11 @@ export default function DataFlowBackground() {
       ================================================= */}
 
       <div
-        className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          h-[700px]
-          w-[700px]
-          -translate-x-1/2
-          -translate-y-1/2
-          rounded-full
-          bg-[#00cdb0]/10
-          blur-[150px]
-        "
+        className=" pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00cdb0]/10 blur-[150px] "
       />
-
       <div
-        className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-[48%]
-          h-[350px]
-          w-[350px]
-          -translate-x-1/2
-          -translate-y-1/2
-          rounded-full
-          bg-[#00ffe0]/10
-          blur-[100px]
-        "
+        className=" pointer-events-none absolute left-1/2 top-[48%] h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00ffe0]/10 blur-[100px] "
       />
-
-      {/* =================================================
-          THREE.JS
-      ================================================= */}
-
       <Canvas
         camera={{
           position: [0, 0, 7],
