@@ -190,7 +190,7 @@ function Counter({
 
                 {/* Photo */}
                 <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10">
-                    <img src="/public/profile.png"
+                    <img src=" /profile.png"
                     alt="Tolojanahary Stephan"
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                     />
