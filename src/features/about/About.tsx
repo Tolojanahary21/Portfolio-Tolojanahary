@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/static-components */
  
 "use client";
@@ -189,8 +190,7 @@ function Counter({
 
                 {/* Photo */}
                 <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10">
-                    <img
-                    src="/profile.png"
+                    <img src="/public/profile.png"
                     alt="Tolojanahary Stephan"
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                     />
