@@ -1,4 +1,4 @@
-import DataFlowBackground from "@/src/background/DataFlowBackground"
+import DataFlowBackground from "@/src/components/background/DataFlowBackground";
 import { SiGithub, SiDiscord, SiLinkerd, SiGmail } from "react-icons/si";
 import { IconBrandLinkedin } from '@tabler/icons-react';
 import { Mail } from "lucide-react";

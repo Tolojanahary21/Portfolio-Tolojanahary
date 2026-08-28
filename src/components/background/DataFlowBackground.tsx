@@ -696,7 +696,7 @@ function Scene() {
 
 export default function DataFlowBackground() {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#000103]">
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-[#000103]">
 
       {/* =================================================
           HALO CENTRAL
@@ -728,12 +728,7 @@ export default function DataFlowBackground() {
       ================================================= */}
 
       <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          bg-[radial-gradient(circle_at_center,transparent_15%,rgba(0,1,3,0.45)_65%,#000103_100%)]
-        "
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,rgba(0,1,3,0.45)_65%,#000103_100%)] "
       />
 
       {/* =================================================
