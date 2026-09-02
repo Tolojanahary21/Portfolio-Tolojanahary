@@ -596,7 +596,7 @@ export default function DataFlowBackground() {
           ANIMATIONS
       ================================================= */}
 
-      <style jsx>{`
+      <style>{`
         @keyframes float-a {
           0%,
           100% {
