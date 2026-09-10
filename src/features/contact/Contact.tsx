@@ -1,64 +1,172 @@
+ 
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SiGithub, SiDiscord  } from "react-icons/si";
+import { useForm, ValidationError } from "@formspree/react";
+import { SiGithub, SiDiscord } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 import { Mail, Send, Loader2, Check, X } from "lucide-react";
 import ContactsBackground from "./ContactsBackground";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type FormErrors = {
+  name?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
+};
 
 const socials = [
-  { icon: SiGithub, href: "https://github.com/Tolojanahary21", label: "GitHub" },
-  { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/tolojanahary-stephan-344a77397/", label: "LinkedIn" },
-  { icon: SiDiscord, href: "https://discord.com/channels/@me", label: "Discord" },
+  {
+    icon: SiGithub,
+    href: "https://github.com/Tolojanahary21",
+    label: "GitHub",
+  },
+  {
+    icon: FaLinkedinIn,
+    href: "https://www.linkedin.com/in/tolojanahary-stephan-344a77397/",
+    label: "LinkedIn",
+  },
+  {
+    icon: SiDiscord,
+    href: "https://discord.com/channels/@me",
+    label: "Discord",
+  },
 ];
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  // ─────────────────────────────────────────────
+  // Formspree
+  // ─────────────────────────────────────────────
+  const [state, handleSubmit] = useForm("mlgwkrrb");
 
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+  // ─────────────────────────────────────────────
+  // Animation background
+  // ─────────────────────────────────────────────
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.2 }
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("sending");
-    setErrorMsg("");
-
-    const form = e.currentTarget;
-    const data = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-    };
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+  // ─────────────────────────────────────────────
+  // Succès Formspree
+  // ─────────────────────────────────────────────
+  useEffect(() => {
+    if (state.succeeded) {
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
       });
 
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || "Échec de l'envoi");
-      }
-
-      setStatus("sent");
-      form.reset();
-    } catch (err) {
-      setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Une erreur est survenue");
+      setFormErrors({});
     }
+  }, [state.succeeded]);
+
+  // ─────────────────────────────────────────────
+  // Validation locale
+  // ─────────────────────────────────────────────
+  const validateForm = (): FormErrors => {
+    const errors: FormErrors = {};
+
+    // Nom
+    if (!formData.name.trim()) {
+      errors.name = "Le nom est requis";
+    } else if (formData.name.trim().length < 2) {
+      errors.name = "Le nom doit contenir au moins 2 caractères";
+    }
+
+    // Email
+    if (!formData.email.trim()) {
+      errors.email = "L'email est requis";
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
+    ) {
+      errors.email = "Email invalide";
+    }
+
+    // Sujet
+    if (!formData.subject.trim()) {
+      errors.subject = "Le sujet est requis";
+    }
+
+    // Message
+    if (!formData.message.trim()) {
+      errors.message = "Le message est requis";
+    } else if (formData.message.trim().length < 10) {
+      errors.message =
+        "Le message doit contenir au moins 10 caractères";
+    }
+
+    return errors;
+  };
+
+  // ─────────────────────────────────────────────
+  // Changement des champs
+  // ─────────────────────────────────────────────
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (formErrors[name as keyof FormErrors]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  // ─────────────────────────────────────────────
+  // Envoi Formspree
+  // ─────────────────────────────────────────────
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const errors = validateForm();
+
+    setFormErrors(errors);
+
+    // Stop si erreur de validation
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    // FormData envoyé à Formspree
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("name", formData.name.trim());
+    formDataToSend.append("email", formData.email.trim());
+    formDataToSend.append("subject", formData.subject.trim());
+    formDataToSend.append("message", formData.message.trim());
+
+    await handleSubmit(formDataToSend);
   };
 
   return (
@@ -70,15 +178,17 @@ export default function Contact() {
       <ContactsBackground isVisible={isVisible} />
 
       <div className="relative z-10 mx-auto max-w-5xl">
+        {/* Header */}
         <div className="mb-6 flex items-center gap-4">
           <span className="h-[2px] w-10 bg-[#5ee6c9]" />
+
           <span className="font-[family-name:var(--font-mono)] text-sm font-medium uppercase tracking-[0.35em] text-[#5ee6c9]">
             Contact
           </span>
         </div>
 
         <h2 className="max-w-2xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-4xl">
-          Un projet en tête ?{" "}
+          Un projet en tête?{" "}
           <span className="text-[#5ee6c9]">Parlons-en.</span>
         </h2>
 
@@ -89,7 +199,9 @@ export default function Contact() {
         </p>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          {/* Coordonnées */}
+          {/* ─────────────────────────────────────
+              Coordonnées
+          ───────────────────────────────────── */}
           <div className="flex flex-col justify-between">
             <div className="space-y-6">
               <a
@@ -99,14 +211,19 @@ export default function Contact() {
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#5ee6c9]/10 text-[#5ee6c9]">
                   <Mail size={18} />
                 </span>
+
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/40">Email</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                    Email
+                  </p>
+
                   <p className="mt-0.5 font-[family-name:var(--font-mono)] text-sm">
                     tolojanaharyandriatahiana@gmail.com
                   </p>
                 </div>
               </a>
 
+              {/* Réseaux */}
               <div className="flex gap-4">
                 {socials.map(({ icon: Icon, href, label }) => (
                   <a
@@ -123,72 +240,167 @@ export default function Contact() {
               </div>
             </div>
 
+            {/* Disponibilité */}
             <div className="mt-10 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 lg:mt-0">
               <span className="h-2 w-2 animate-pulse rounded-full bg-[#5ee6c9] shadow-[0_0_8px_#5ee6c9]" />
+
               <p className="text-xs uppercase tracking-[0.2em] text-white/50">
                 Disponible pour de nouveaux projets
               </p>
             </div>
           </div>
 
-          {/* Formulaire */}
+          {/* ─────────────────────────────────────
+              Formulaire
+          ───────────────────────────────────── */}
           <form
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
             className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm sm:p-8"
           >
+            {/* Nom */}
             <div>
-              <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50">
+              <label
+                htmlFor="name"
+                className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
+              >
                 Nom
               </label>
+
               <input
                 id="name"
                 name="name"
                 type="text"
-                required
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Votre nom"
-                className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50"
+                className={`w-full rounded-xl border ${
+                  formErrors.name
+                    ? "border-red-400/70"
+                    : "border-white/10"
+                } bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50`}
               />
+
+              {formErrors.name && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {formErrors.name}
+                </p>
+              )}
             </div>
 
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50">
+              <label
+                htmlFor="email"
+                className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
+              >
                 Email
               </label>
+
               <input
                 id="email"
                 name="email"
                 type="email"
-                required
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="vous@exemple.com"
-                className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50"
+                className={`w-full rounded-xl border ${
+                  formErrors.email
+                    ? "border-red-400/70"
+                    : "border-white/10"
+                } bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50`}
+              />
+
+              {formErrors.email && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {formErrors.email}
+                </p>
+              )}
+
+              <ValidationError
+                prefix="Email"
+                field="email"
+                errors={state.errors}
               />
             </div>
 
+            {/* Sujet */}
             <div>
-              <label htmlFor="message" className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50">
+              <label
+                htmlFor="subject"
+                className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
+              >
+                Sujet
+              </label>
+
+              <input
+                id="subject"
+                name="subject"
+                type="text"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="Collaboration, opportunité..."
+                className={`w-full rounded-xl border ${
+                  formErrors.subject
+                    ? "border-red-400/70"
+                    : "border-white/10"
+                } bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50`}
+              />
+
+              {formErrors.subject && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {formErrors.subject}
+                </p>
+              )}
+            </div>
+
+            {/* Message */}
+            <div>
+              <label
+                htmlFor="message"
+                className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
+              >
                 Message
               </label>
+
               <textarea
                 id="message"
                 name="message"
-                required
+                value={formData.message}
+                onChange={handleChange}
                 rows={5}
                 placeholder="Décrivez votre projet ou votre question..."
-                className="w-full resize-none rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50"
+                className={`w-full resize-none rounded-xl border ${
+                  formErrors.message
+                    ? "border-red-400/70"
+                    : "border-white/10"
+                } bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#5ee6c9]/50`}
+              />
+
+              {formErrors.message && (
+                <p className="mt-1.5 text-xs text-red-400">
+                  {formErrors.message}
+                </p>
+              )}
+
+              <ValidationError
+                prefix="Message"
+                field="message"
+                errors={state.errors}
               />
             </div>
 
+            {/* Bouton */}
             <button
               type="submit"
-              disabled={status === "sending"}
+              disabled={state.submitting}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#5ee6c9] px-6 py-3.5 text-sm font-semibold text-[#06110f] transition-all duration-300 hover:shadow-[0_0_30px_rgba(94,230,201,0.35)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {status === "sending" ? (
+              {state.submitting ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
                   Envoi en cours...
                 </>
-              ) : status === "sent" ? (
+              ) : state.succeeded ? (
                 <>
                   <Check size={16} />
                   Message envoyé
@@ -201,15 +413,26 @@ export default function Contact() {
               )}
             </button>
 
-            {status === "sent" && (
-              <p className="flex items-center gap-2 text-xs text-[#5ee6c9]">
-                <Check size={14} /> Merci, je réponds généralement sous 48h.
-              </p>
+            {/* Succès */}
+            {state.succeeded && (
+              <div className="flex items-center gap-2 rounded-xl border border-[#5ee6c9]/20 bg-[#5ee6c9]/5 px-4 py-3 text-xs text-[#5ee6c9]">
+                <Check size={14} />
+                <span>
+                  Message envoyé avec succès. Je vous répondrai dans les
+                  plus brefs délais.
+                </span>
+              </div>
             )}
-            {status === "error" && (
-              <p className="flex items-center gap-2 text-xs text-red-400">
-                <X size={14} /> {errorMsg || "L'envoi a échoué, réessaie ou écris-moi directement."}
-              </p>
+
+            {/* Erreur */}
+            {state.errors && (
+              <div className="flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/5 px-4 py-3 text-xs text-red-400">
+                <X size={14} />
+                <span>
+                  Une erreur est survenue lors de l&apos;envoi. Veuillez
+                  réessayer ou m&apos;écrire directement par email.
+                </span>
+              </div>
             )}
           </form>
         </div>
@@ -217,3 +440,4 @@ export default function Contact() {
     </section>
   );
 }
+ 
