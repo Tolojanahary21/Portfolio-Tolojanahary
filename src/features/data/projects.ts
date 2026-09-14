@@ -133,7 +133,7 @@ export const projects: Project[] = [
       },
     ],
     github:
-      "https://github.com/Tolojanahary21/Gestion-de-Stagiaire",
+      "https://github.com/Tolojanahary21/GestionStagiaire",
     color: "#7c9cff",
   },
 

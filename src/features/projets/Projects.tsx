@@ -43,8 +43,8 @@ export default function Projects() {
 
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="max-w-2xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-4xl">
-            Ce que j&apos;ai{" "}
-            <span className="text-[#5ee6c9]">construit.</span>
+            Mes{" "}
+            <span className="text-[#5ee6c9]">Realisations.</span>
           </h2>
 
           <a
