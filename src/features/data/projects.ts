@@ -16,6 +16,8 @@ import {
   SiFlutter,
   SiDart,
   SiJavascript,
+  SiLaravel,
+  SiVuetify
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 export type ProjectTechnology = {
@@ -184,22 +186,26 @@ export const projects: Project[] = [
 
   {
     id: 5,
-    title: "EasyDevis",
+    title: "Plateforme Web YouthComputing",
     description:
-      "Application mobile permettant de créer et gérer des devis de manière simple et structurée.",
-    image: "/projects/easydevis.png",
+      "Application Web de YouthComputing ",
+    image: "/projects/Youth.png",
     stack: [
       {
-        name: "Flutter",
-        icon: SiFlutter,
+        name: "Laravel",
+        icon: SiLaravel,
       },
       {
-        name: "Dart",
-        icon: SiDart,
+        name: "VueJS",
+        icon: SiVuetify,
+      },
+      {
+        name: "TailwindCSS",
+        icon: SiTailwindcss,
       },
     ],
     github:
-      "https://github.com/Tolojanahary21/EasyDevis",
+      "https://github.com/Tolojanahary21/",
     color: "#65a8ff",
   },
 

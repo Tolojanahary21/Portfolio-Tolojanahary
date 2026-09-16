@@ -74,7 +74,7 @@ export default function Contact() {
   // ─────────────────────────────────────────────
   useEffect(() => {
     if (state.succeeded) {
-      setFormData({
+      snpetFormData({
         name: "",
         email: "",
         subject: "",
