@@ -8,6 +8,7 @@ import { SiGithub, SiDiscord } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 import { Mail, Send, Loader2, Check, X } from "lucide-react";
 import ContactsBackground from "./ContactsBackground";
+import { useLanguage } from "@/src/components/layout/LanguageContext";
 
 type FormErrors = {
   name?: string;
@@ -35,6 +36,7 @@ const socials = [
 ];
 
 export default function Contact() {
+  const { language } = useLanguage();
   // ─────────────────────────────────────────────
   // Formspree
   // ─────────────────────────────────────────────
@@ -74,7 +76,7 @@ export default function Contact() {
   // ─────────────────────────────────────────────
   useEffect(() => {
     if (state.succeeded) {
-      snpetFormData({
+      setFormData({
         name: "",
         email: "",
         subject: "",
@@ -189,14 +191,11 @@ export default function Contact() {
         </div>
 
         <h2 className="max-w-2xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-4xl">
-          Un projet en tête?{" "}
-          <span className="text-[#5ee6c9]">Parlons-en.</span>
+          {language === "fr" ? <>Un projet en tête? <span className="text-[#5ee6c9]">Parlons-en.</span></> : <>Have a project in mind? <span className="text-[#5ee6c9]">Let’s talk.</span></>}
         </h2>
 
         <p className="mt-6 max-w-xl text-[17px] leading-8 text-white/65">
-          Que ce soit pour une opportunité, une collaboration ou juste une
-          question technique, le formulaire ci-dessous m&apos;écrit directement
-          par mail.
+          {language === "fr" ? "Que ce soit pour une opportunité, une collaboration ou juste une question technique, le formulaire ci-dessous m'écrit directement par mail." : "Whether you have an opportunity, want to collaborate, or have a technical question, use the form below to email me directly."}
         </p>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
@@ -246,7 +245,7 @@ export default function Contact() {
               <span className="h-2 w-2 animate-pulse rounded-full bg-[#5ee6c9] shadow-[0_0_8px_#5ee6c9]" />
 
               <p className="text-xs uppercase tracking-[0.2em] text-white/50">
-                Disponible pour de nouveaux projets
+                {language === "fr" ? "Disponible pour de nouveaux projets" : "Available for new projects"}
               </p>
             </div>
           </div>
@@ -264,7 +263,7 @@ export default function Contact() {
                 htmlFor="name"
                 className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
               >
-                Nom
+                {language === "fr" ? "Nom" : "Name"}
               </label>
 
               <input
@@ -273,7 +272,7 @@ export default function Contact() {
                 type="text"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Votre nom"
+                placeholder={language === "fr" ? "Votre nom" : "Your name"}
                 className={`w-full rounded-xl border ${
                   formErrors.name
                     ? "border-red-400/70"
@@ -330,7 +329,7 @@ export default function Contact() {
                 htmlFor="subject"
                 className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
               >
-                Sujet
+                {language === "fr" ? "Sujet" : "Subject"}
               </label>
 
               <input
@@ -339,7 +338,7 @@ export default function Contact() {
                 type="text"
                 value={formData.subject}
                 onChange={handleChange}
-                placeholder="Collaboration, opportunité..."
+                placeholder={language === "fr" ? "Collaboration, opportunité..." : "Collaboration, opportunity..."}
                 className={`w-full rounded-xl border ${
                   formErrors.subject
                     ? "border-red-400/70"
@@ -360,7 +359,7 @@ export default function Contact() {
                 htmlFor="message"
                 className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/50"
               >
-                Message
+                {language === "fr" ? "Message" : "Message"}
               </label>
 
               <textarea
@@ -369,7 +368,7 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 rows={5}
-                placeholder="Décrivez votre projet ou votre question..."
+                placeholder={language === "fr" ? "Décrivez votre projet ou votre question..." : "Describe your project or question..."}
                 className={`w-full resize-none rounded-xl border ${
                   formErrors.message
                     ? "border-red-400/70"
@@ -399,17 +398,17 @@ export default function Contact() {
               {state.submitting ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  Envoi en cours...
+                  {language === "fr" ? "Envoi en cours..." : "Sending..."}
                 </>
               ) : state.succeeded ? (
                 <>
                   <Check size={16} />
-                  Message envoyé
+                  {language === "fr" ? "Message envoyé" : "Message sent"}
                 </>
               ) : (
                 <>
                   <Send size={16} />
-                  Envoyer le message
+                  {language === "fr" ? "Envoyer le message" : "Send message"}
                 </>
               )}
             </button>
@@ -419,8 +418,8 @@ export default function Contact() {
               <div className="flex items-center gap-2 rounded-xl border border-[#5ee6c9]/20 bg-[#5ee6c9]/5 px-4 py-3 text-xs text-[#5ee6c9]">
                 <Check size={14} />
                 <span>
-                  Message envoyé avec succès. Je vous répondrai dans les
-                  plus brefs délais.
+                  Votre message a bien été transmis. Je vous répondrai dans
+                  les plus brefs délais.
                 </span>
               </div>
             )}

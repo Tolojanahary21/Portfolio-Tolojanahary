@@ -5,8 +5,10 @@ import { SiGithub } from "react-icons/si";
 import { ExternalLink } from "lucide-react";
 import ProjectsBackground from "./ProjectsBackground";
 import { projects } from "@/src/features/data/projects";
+import { useLanguage } from "@/src/components/layout/LanguageContext";
 
 export default function Projects() {
+  const { language } = useLanguage();
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -37,14 +39,13 @@ export default function Projects() {
           <span className="h-[2px] w-10 bg-[#5ee6c9]" />
 
           <span className="font-[family-name:var(--font-mono)] text-sm font-medium uppercase tracking-[0.35em] text-[#5ee6c9]">
-            Projets
+            {language === "fr" ? "Projets" : "Projects"}
           </span>
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="max-w-2xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-4xl">
-            Mes{" "}
-            <span className="text-[#5ee6c9]">Realisations.</span>
+            {language === "fr" ? <>Mes <span className="text-[#5ee6c9]">Réalisations.</span></> : <>My <span className="text-[#5ee6c9]">Work.</span></>}
           </h2>
 
           <a
@@ -54,7 +55,7 @@ export default function Projects() {
             className="inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-xs text-white/60 transition-colors hover:text-[#5ee6c9]"
           >
             <SiGithub className="text-base" />
-            Voir tout sur GitHub
+            {language === "fr" ? "Voir tout sur GitHub" : "View all on GitHub"}
           </a>
         </div>
 
@@ -89,13 +90,13 @@ export default function Projects() {
                 {p.image ? (
                   <img
                     src={p.image}
-                    alt={`Aperçu du projet ${p.title}`}
+                    alt={language === "fr" ? `Aperçu du projet ${p.title}` : `Preview of ${p.title}`}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-white/[0.03]">
                     <span className="font-[family-name:var(--font-mono)] text-xs text-white/30">
-                      Aucun aperçu disponible
+                      {language === "fr" ? "Aucun aperçu disponible" : "No preview available"}
                     </span>
                   </div>
                 )}
@@ -130,7 +131,7 @@ export default function Projects() {
 
                 {/* Description */}
                 <p className="relative mt-4 text-[15px] leading-7 text-white/60">
-                  {p.description}
+                  {language === "fr" ? p.description : (({ "Système de gestion des salles de classe permettant de gérer les professeurs, les salles et leurs occupations.": "Classroom management system for managing teachers, rooms, and room bookings.", "Plateforme e-commerce avec authentification, inscription avec vérification OTP et communication avec un backend NestJS et Prisma.": "E-commerce platform with authentication, OTP verified sign-up, and a NestJS and Prisma backend.", "Application full-stack dédiée à la gestion des stagiaires et au suivi des stages, développée avec une architecture moderne pour la SPAT.": "Full-stack application for managing interns and tracking internships, built with a modern architecture for SPAT.", "Plateforme d'apprentissage assistée par intelligence artificielle utilisant une architecture RAG, les embeddings et la recherche vectorielle.": "AI-assisted learning platform using RAG architecture, embeddings, and vector search.", "Application Web de YouthComputing ": "YouthComputing web application", "Application web permettant de planifier des tâches avec la méthode du chemin critique (CPM), avec gestion des dépendances et calcul du planning.": "Web app for planning tasks with the critical path method (CPM), including dependency management and schedule calculation." } as Record<string, string>)[p.description] ?? p.description)}
                 </p>
 
                 {/* Technologies */}

@@ -10,6 +10,7 @@ import {
   Code2,
 } from "lucide-react";
 import FormationBackground from "./FormationBackground";
+import { useLanguage } from "@/src/components/layout/LanguageContext";
 type Category = "all" | "academic" | "internship";
 
 type Formation = {
@@ -39,6 +40,7 @@ const formations: Formation[] = [
       "Parcours : Informatique Générale",
     ],
   },
+  
   {
     id: 2,
     category: "academic",
@@ -57,22 +59,6 @@ const formations: Formation[] = [
     id: 3,
     category: "internship",
     title: "Développeur Web Full Stack",
-    institution: "YouthComputing",
-    period: "2024",
-    status: "Terminé",
-    description:
-      "Stage consacré à la conception et à la réalisation de la plateforme web de YouthComputing.",
-    technologies: [
-      "Laravel",
-      "Vue.js",
-      "TailwindCSS",
-      "MySQL",
-    ],
-  },
-  {
-    id: 4,
-    category: "internship",
-    title: "Développeur Web Full Stack",
     institution: "SPAT",
     period: "2025",
     status: "Terminé",
@@ -85,9 +71,39 @@ const formations: Formation[] = [
       "PostgreSQL",
     ],
   },
+  {
+    id: 4,
+    category: "internship",
+    title: "Développeur Web Full Stack",
+    institution: "YouthComputing",
+    period: "2024",
+    status: "Terminé",
+    description:
+      "Stage consacré à la conception et à la réalisation de la plateforme web de YouthComputing.",
+    technologies: [
+      "Laravel",
+      "Vue.js",
+      "TailwindCSS",
+      "MySQL",
+    ],
+  },
+  
 ];
 
 export default function Formations() {
+  const { language } = useLanguage();
+  const translate = (value: string) => language === "en" ? (({
+    "Master 1 — Informatique Générale": "Master's Year 1 — General Computer Science",
+    "Licence Professionnelle — Informatique Générale": "Professional Bachelor's — General Computer Science",
+    "2026 — En cours": "2026 — Present",
+    "Poursuite de mes études en Informatique Générale à l'École Nationale d'Informatique.": "Continuing my studies in General Computer Science at the National School of Informatics.",
+    "Niveau : Master 1": "Level: Master's Year 1",
+    "Parcours : Informatique Générale": "Program: General Computer Science",
+    "Formation professionnelle dans le domaine des Sciences de l'Ingénieur, parcours Informatique Générale.": "Professional training in Engineering Sciences, specializing in General Computer Science.",
+    "Domaine : Sciences de l'Ingénieur": "Field: Engineering Sciences",
+    "Stage consacré à la conception et à la réalisation d'une plateforme web de gestion de stage au sein de la SPAT.": "Internship focused on designing and building an internship management web platform at SPAT.",
+    "Stage consacré à la conception et à la réalisation de la plateforme web de YouthComputing.": "Internship focused on designing and building the YouthComputing web platform.",
+  } as Record<string, string>)[value] ?? value) : value;
   const [activeCategory, setActiveCategory] = useState<Category>("all");
   const sectionRef = useRef<HTMLElement | null>(null);
 const [isVisible, setIsVisible] = useState(false);
@@ -122,15 +138,15 @@ useEffect(() => {
   const filters = [
     {
       id: "all" as Category,
-      label: "Toutes les formations",
+      label: language === "fr" ? "Toutes les formations" : "All education",
     },
     {
       id: "academic" as Category,
-      label: "Académiques",
+      label: language === "fr" ? "Académiques" : "Academic",
     },
     {
       id: "internship" as Category,
-      label: "Stages",
+      label: language === "fr" ? "Stages" : "Internships",
     },
   ];
 
@@ -156,17 +172,15 @@ useEffect(() => {
 >
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-sm text-cyan-300">
             <GraduationCap size={16} />
-            <span>Mon parcours</span>
+            <span>{language === "fr" ? "Mon parcours" : "My background"}</span>
           </div>
 
           <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Formations &{" "}
-            <span className="text-cyan-300">Expériences</span>
+            {language === "fr" ? <>Formations & <span className="text-cyan-300">Expériences</span></> : <>Education & <span className="text-cyan-300">Experience</span></>}
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/50 md:text-base">
-            Mon parcours académique et mes expériences professionnelles
-            à travers différentes formations et stages.
+            {language === "fr" ? "Mon parcours académique et mes expériences professionnelles à travers différentes formations et stages." : "My academic background and professional experience through education and internships."}
           </p>
         </div>
 
@@ -262,7 +276,7 @@ useEffect(() => {
                                 : "bg-white/30"
                             }`}
                           />
-                          {formation.status}
+                          {language === "en" ? (({ "En cours": "In progress", "Terminée": "Completed", "Terminé": "Completed" } as Record<string, string>)[formation.status] ?? formation.status) : formation.status}
                         </span>
 
                         <span className="flex items-center gap-1.5 text-xs text-white/40">
@@ -281,12 +295,12 @@ useEffect(() => {
                           isLeft ? "md:justify-end" : "md:justify-start"
                         }`}
                       >
-                        {isAcademic ? "Formation académique" : "Stage"}
+                        {isAcademic ? (language === "fr" ? "Formation académique" : "Education") : (language === "fr" ? "Stage" : "Internship")}
                       </div>
 
                       {/* Title */}
                       <h3 className="text-xl font-semibold text-white transition-colors duration-300 group-hover:text-cyan-200">
-                        {formation.title}
+                          {translate(formation.title)}
                       </h3>
 
                       {/* Institution */}
@@ -301,7 +315,7 @@ useEffect(() => {
 
                       {/* Description */}
                       <p className="mt-5 text-sm leading-7 text-white/45">
-                        {formation.description}
+                        {translate(formation.description)}
                       </p>
 
                       {/* Details */}
@@ -316,7 +330,7 @@ useEffect(() => {
                               key={detail}
                               className="rounded-lg border border-white/8 bg-white/[0.025] px-3 py-1.5 text-xs text-white/50"
                             >
-                              {detail}
+                              {translate(detail)}
                             </span>
                           ))}
                         </div>
@@ -331,7 +345,7 @@ useEffect(() => {
                             }`}
                           >
                             <Code2 size={14} />
-                            Technologies
+                            {language === "fr" ? "Technologies" : "Technologies"}
                           </div>
 
                           <div

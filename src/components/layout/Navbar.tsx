@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "./LanguageContext";
 
 const links = [
   { name: "Accueil", href: "#accueil" },
@@ -11,6 +12,7 @@ const links = [
 ];
 
 export default function Navbar() {
+  const { language, setLanguage } = useLanguage();
   const [active, setActive] = useState("Accueil");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -26,6 +28,8 @@ export default function Navbar() {
     setActive(name);
     setMenuOpen(false);
   };
+  const englishLinkNames: Record<string, string> = { Accueil: "Home", Formations: "Education", "Compétences": "Skills", Projets: "Projects", Contact: "Contact" };
+  const translatedLinks = links.map((link) => ({ ...link, name: language === "en" ? (englishLinkNames[link.name] ?? link.name) : link.name }));
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full px-5 py-5 sm:px-8 lg:px-12">
@@ -50,7 +54,7 @@ export default function Navbar() {
 
         {/* NAVIGATION DESKTOP */}
         <div className="hidden items-center gap-7 md:flex">
-          {links.map((link) => (
+          {translatedLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
@@ -76,13 +80,22 @@ export default function Navbar() {
           onClick={() => handleNavigation("Contact")}
           className="hidden rounded-full border border-[#5ee6c9]/40 px-5 py-2 text-sm font-semibold text-[#5ee6c9] transition-all duration-300 hover:border-[#5ee6c9] hover:bg-[#5ee6c9] hover:text-[#0a0e14] md:block"
         >
-          Me contacter
+          {language === "fr" ? "Me contacter" : "Contact me"}
         </a>
+        <button
+          type="button"
+          aria-label={language === "fr" ? "Switch to English" : "Passer en français"}
+          title={language === "fr" ? "Switch to English" : "Passer en français"}
+          onClick={() => setLanguage(language === "fr" ? "en" : "fr")}
+          className="hidden rounded-full border border-white/10 px-3 py-2 text-lg leading-none hover:bg-white/10 md:block"
+        >
+          {language === "fr" ? "🇺🇸" : "🇫🇷"}
+        </button>
 
         {/* BOUTON MENU MOBILE */}
         <button
           type="button"
-          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={menuOpen ? (language === "fr" ? "Fermer le menu" : "Close menu") : (language === "fr" ? "Ouvrir le menu" : "Open menu")}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen(!menuOpen)}
           className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 md:hidden"
@@ -116,7 +129,7 @@ export default function Navbar() {
         }`}
       >
         <div className="flex flex-col p-4">
-          {links.map((link, index) => (
+          {translatedLinks.map((link, index) => (
             <a
               key={link.name}
               href={link.href}
@@ -140,8 +153,16 @@ export default function Navbar() {
             onClick={() => handleNavigation("Contact")}
             className="mt-2 rounded-xl border border-[#5ee6c9]/40 px-4 py-3 text-center text-sm font-semibold text-[#5ee6c9] transition-all duration-300 hover:bg-[#5ee6c9] hover:text-[#0a0e14]"
           >
-            Me contacter
+            {language === "fr" ? "Me contacter" : "Contact me"}
           </a>
+          <button
+            type="button"
+            aria-label={language === "fr" ? "Switch to English" : "Passer en français"}
+            onClick={() => { setLanguage(language === "fr" ? "en" : "fr"); setMenuOpen(false); }}
+            className="mt-3 flex items-center justify-center rounded-xl border border-white/10 px-4 py-3 text-2xl text-white"
+          >
+            {language === "fr" ? "🇺🇸" : "🇫🇷"}
+          </button>
         </div>
       </div>
     </header>

@@ -53,6 +53,7 @@ import {
 } from "lucide-react";
 
 import SkillsBackground from "./SkillsBackground";
+import { useLanguage } from "@/src/components/layout/LanguageContext";
 
 /* =========================================================
    STACK
@@ -298,6 +299,7 @@ const categories = [
 ========================================================= */
 
 export default function Skills() {
+  const { language } = useLanguage();
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -339,18 +341,16 @@ export default function Skills() {
           <span className="h-[2px] w-10 bg-[#5ee6c9]" />
 
           <span className="font-[family-name:var(--font-mono)] text-sm font-medium uppercase tracking-[0.35em] text-[#5ee6c9]">
-            Compétences
+            {language === "fr" ? "Compétences" : "Skills"}
           </span>
         </div>
 
         <h2 className="max-w-3xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-5xl">
-          Les outils avec lesquels{" "}
-          <span className="text-[#5ee6c9]">je construis.</span>
+          {language === "fr" ? <>Les outils avec lesquels <span className="text-[#5ee6c9]">je construis.</span></> : <>The tools I <span className="text-[#5ee6c9]">build with.</span></>}
         </h2>
 
         <p className="mt-6 max-w-2xl text-[17px] leading-8 text-white/55">
-          Une stack construite au fil de mes projets, du développement
-          d&apos;interfaces aux APIs, aux applications mobiles et aux données.
+          {language === "fr" ? "Une stack construite au fil de mes projets, du développement d'interfaces aux APIs, aux applications mobiles et aux données." : "A toolkit shaped by my projects, from interface development to APIs, mobile applications, and data."}
         </p>
 
         {/* =================================================
@@ -416,11 +416,11 @@ export default function Skills() {
 
                   <div>
                     <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold">
-                      {cat.title}
+                      {language === "en" ? (({ "Bases de données": "Databases", "Outils": "Tools" } as Record<string, string>)[cat.title] ?? cat.title) : cat.title}
                     </h3>
 
                     <p className="mt-1 text-xs text-white/35">
-                      {cat.description}
+                      {language === "en" ? (({ "Interfaces web modernes et expériences interactives.": "Modern web interfaces and interactive experiences.", "APIs, services et logique métier.": "APIs, services, and business logic.", "Stockage, manipulation et accès aux données.": "Data storage, processing, and access.", "Applications mobiles multiplateformes.": "Cross-platform mobile applications.", "Les outils qui structurent mon workflow.": "Tools that shape my workflow." } as Record<string, string>)[cat.description] ?? cat.description) : cat.description}
                     </p>
                   </div>
                 </div>
@@ -507,7 +507,7 @@ export default function Skills() {
                     color: `${cat.color}aa`,
                   }}
                 >
-                  {String(cat.skills.length).padStart(2, "0")} technologies
+                  {String(cat.skills.length).padStart(2, "0")} {language === "fr" ? "technologies" : "technologies"}
                 </span>
               </div>
             </div>

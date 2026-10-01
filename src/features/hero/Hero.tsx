@@ -1,3 +1,6 @@
+"use client";
+
+import { useLanguage } from "@/src/components/layout/LanguageContext";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { SiGithub, SiDiscord, SiGmail,
           SiJavascript,
@@ -54,6 +57,7 @@ const socials = [
 ];
 
 export default function AccueilHero() {
+  const { language } = useLanguage();
   return (
     <section
       id="accueil"
@@ -67,14 +71,14 @@ export default function AccueilHero() {
           tolojanahary<span className="text-[#5ee6c9]">.</span>dev
         </span>
         <div className="hidden items-center gap-9 text-sm text-white/60 md:flex">
-          <a href="#accueil" className="hover:text-white">Accueil</a>
-          <a href="#projets" className="hover:text-white">Projets</a>
-          <a href="#about" className="hover:text-white">À propos</a>
+          <a href="#accueil" className="hover:text-white">{language === "fr" ? "Accueil" : "Home"}</a>
+          <a href="#projets" className="hover:text-white">{language === "fr" ? "Projets" : "Projects"}</a>
+          <a href="#about" className="hover:text-white">{language === "fr" ? "À propos" : "About"}</a>
           <a href="#contact" className="hover:text-white">Contact</a>
         </div>
         <div className="hidden items-center gap-2 rounded-full border border-white/10 px-3.5 py-1.5 text-xs text-white/60 sm:flex">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#5ee6c9] shadow-[0_0_8px_#5ee6c9]" />
-          Disponible pour de nouveaux projets
+          {language === "fr" ? "Disponible pour de nouveaux projets" : "Available for new projects"}
         </div>
       </nav>
 
@@ -92,7 +96,7 @@ export default function AccueilHero() {
           <div className="max-w-xl">
             <div className="mb-5 flex flex-wrap items-center gap-2.5 font-[family-name:var(--font-mono)] text-[13px] text-[#ffb454]">
               <span>~/portfolio</span>
-              <span className="text-white/50">// étudiant en informatique · fullstack</span>
+              <span className="text-white/50">// {language === "fr" ? "étudiant en informatique · fullstack" : "computer science student · full stack"}</span>
             </div>
 
             <h1 className="font-[family-name:var(--font-display)] text-[2.4rem] font-bold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
@@ -105,16 +109,14 @@ export default function AccueilHero() {
             <div className="mt-6 font-[family-name:var(--font-mono)] text-sm text-white/60">
               <span className="text-[#5ee6c9]">{"{"}</span>{" "}
               <span className="text-[#c792ea]">role</span>:{" "}
-              <span className="text-[#9ece6a]">&quot;Développeur Fullstack&quot;</span>,{" "}
+              <span className="text-[#9ece6a]">&quot;{language === "fr" ? "Développeur Fullstack" : "Full Stack Developer"}&quot;</span>,{" "}
               <span className="text-[#c792ea]">basé</span>:{" "}
               <span className="text-[#9ece6a]">&quot;Fianarantsoa&quot;</span>{" "}
               <span className="text-[#5ee6c9]">{"}"}</span>
             </div>
 
             <p className="mt-6 max-w-[52ch] text-[15.5px] leading-relaxed text-white/80">
-              Je conçois et développe des applications web et mobiles, de la conception à la réalisation.
-              J’accorde une attention particulière à la qualité du code,
-              à l’expérience utilisateur et à la création de solutions fiables et adaptées aux besoins réels.
+              {language === "fr" ? "Je conçois et développe des applications web et mobiles, de la conception à la réalisation. J’accorde une attention particulière à la qualité du code, à l’expérience utilisateur et à la création de solutions fiables et adaptées aux besoins réels." : "I design and build web and mobile applications, from concept to delivery. I care about code quality, user experience, and creating reliable solutions that meet real needs."}
 
             </p>
 
@@ -139,14 +141,14 @@ export default function AccueilHero() {
                 href="#projets"
                 className="rounded-full bg-[#5ee6c9] px-6 py-3 text-[13px] font-medium text-[#06110f] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(94,230,201,0.4)]"
               >
-                Voir mes projets
+                {language === "fr" ? "Voir mes projets" : "View my projects"}
               </a>
               <a
                 href="/CV Tolojanahary Stephan.pdf"
                 download
                 className="rounded-full border border-white/10 px-6 py-3 text-[13px] font-medium transition-all duration-300 hover:border-[#ffb454] hover:text-[#ffb454]"
               >
-                Télécharger mon CV
+                {language === "fr" ? "Télécharger mon CV" : "Download my resume"}
               </a>
             </div>
 
@@ -210,13 +212,13 @@ export default function AccueilHero() {
   {[
     {
       v: "5",
-      l: "Projets livrés",
+      l: language === "fr" ? "Projets livrés" : "Projects delivered",
       icon: FolderCheck,
       suffix: "+",
     },
     {
       v: "Web · Mobile",
-      l: "Développement",
+      l: language === "fr" ? "Développement" : "Development",
       icon: Code2,
     },
     {
