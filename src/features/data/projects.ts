@@ -13,8 +13,6 @@ import {
   SiFastapi,
   SiQdrant,
   SiDocker,
-  SiFlutter,
-  SiDart,
   SiJavascript,
   SiLaravel,
   SiVuetify
@@ -29,6 +27,9 @@ export type Project = {
   id: number;
   title: string;
   description: string;
+  /** English copy shown by default; keep the French copy above for the language toggle. */
+  titleEn?: string;
+  descriptionEn?: string;
   image?: string;
   stack: ProjectTechnology[];
   github: string;
@@ -41,6 +42,8 @@ export const projects: Project[] = [
     title: "Gestion_Salle-de-Classe",
     description:
       "Système de gestion des salles de classe permettant de gérer les professeurs, les salles et leurs occupations.",
+    titleEn: "Classroom Management",
+    descriptionEn: "A classroom management system for organizing teachers, rooms, and room schedules.",
     image:"/projects/gestion-salle-classe.png",
     stack: [
       {
@@ -74,6 +77,8 @@ export const projects: Project[] = [
     title: "MarketPlace",
     description:
       "Plateforme e-commerce avec authentification, inscription avec vérification OTP et communication avec un backend NestJS et Prisma.",
+    titleEn: "Marketplace",
+    descriptionEn: "An e-commerce platform with authentication, OTP-verified sign-up, and a NestJS and Prisma backend.",
     image: "/projects/marketplace.png",
     stack: [
       {
@@ -111,6 +116,8 @@ export const projects: Project[] = [
     title: "Gestion de Stagiaires",
     description:
       "Application full-stack dédiée à la gestion des stagiaires et au suivi des stages, développée avec une architecture moderne pour la SPAT.",
+    titleEn: "Internship Management",
+    descriptionEn: "A full-stack application for managing interns and tracking placements, built for SPAT with a modern architecture.",
     image: "/projects/gestion-stagiaires.png",
     stack: [
       {
@@ -144,6 +151,7 @@ export const projects: Project[] = [
     title: "StudyMind AI",
     description:
       "Plateforme d'apprentissage assistée par intelligence artificielle utilisant une architecture RAG, les embeddings et la recherche vectorielle.",
+    descriptionEn: "An AI-powered learning platform using retrieval-augmented generation, embeddings, and vector search.",
     image: "/projects/studymind-ai.png",
     stack: [
       {
@@ -189,6 +197,8 @@ export const projects: Project[] = [
     title: "Plateforme Web YouthComputing",
     description:
       "Application Web de YouthComputing ",
+    titleEn: "YouthComputing Web Platform",
+    descriptionEn: "A web platform built for YouthComputing.",
     image: "/projects/Youth.png",
     stack: [
       {
@@ -214,6 +224,7 @@ export const projects: Project[] = [
     title: "CPM Scheduler",
     description:
       "Application web permettant de planifier des tâches avec la méthode du chemin critique (CPM), avec gestion des dépendances et calcul du planning.",
+    descriptionEn: "A web app for planning tasks with the Critical Path Method, including dependency management and schedule calculations.",
     image: "/projects/cpm.png",
     stack: [
       {

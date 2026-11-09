@@ -18,7 +18,7 @@ const COLORS = ["94,230,201", "255,180,84", "122,162,255"];
 export default function ProjectsBackground({ isVisible }: { isVisible: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const visibleRef = useRef(isVisible);
-  visibleRef.current = isVisible;
+  useEffect(() => { visibleRef.current = isVisible; }, [isVisible]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

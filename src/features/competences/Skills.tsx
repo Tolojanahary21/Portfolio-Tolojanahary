@@ -1,7 +1,6 @@
  
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import {
   SiHtml5,
  
@@ -44,15 +43,15 @@ import { DiCss3 } from "react-icons/di";
 import { VscVscode } from "react-icons/vsc";
 import { FaWindows, FaJava } from "react-icons/fa";
 import {
+  ArrowUpRight,
   Code2,
   Smartphone,
   Server,
   Database,
-  Wrench,
   Network,
 } from "lucide-react";
+import Image from "next/image";
 
-import SkillsBackground from "./SkillsBackground";
 import { useLanguage } from "@/src/components/layout/LanguageContext";
 
 /* =========================================================
@@ -300,220 +299,24 @@ const categories = [
 
 export default function Skills() {
   const { language } = useLanguage();
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const fr = language === "fr";
+  const serviceGroups = [
+    { title: fr ? "Développement web" : "Web design & development", description: fr ? "Des interfaces accessibles, rapides et intuitives, du prototype au produit." : "Accessible, fast interfaces, from early structure to a polished product.", icon: Code2, skills: categories[0].skills, preview: "/projects/marketplace.png" },
+    { title: fr ? "Backend & API" : "Backend & APIs", description: fr ? "Des services fiables, des API claires et une logique métier maintenable." : "Reliable services, clear APIs, and maintainable business logic.", icon: Server, skills: categories[1].skills, preview: "/projects/gestion-stagiaires.png" },
+    { title: fr ? "Applications mobiles" : "Mobile applications", description: fr ? "Des expériences mobiles multiplateformes avec React Native et Flutter." : "Cross-platform mobile experiences with React Native and Flutter.", icon: Smartphone, skills: categories[3].skills, preview: "/projects/cpm.png" },
+    { title: fr ? "Données & outils" : "Data & tooling", description: fr ? "Des bases de données et outils adaptés aux besoins du produit." : "Data platforms and tools chosen for the needs of each product.", icon: Database, skills: [...categories[2].skills, ...categories[4].skills], preview: "/projects/studymind-ai.png" },
+  ];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        threshold: 0.15,
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      id="competences"
-      className="relative min-h-screen overflow-hidden px-6 py-24 text-white"
-    >
-      {/* =====================================================
-          BACKGROUND
-      ===================================================== */}
-
-      <SkillsBackground isVisible={isVisible} />
-
-      <div className="relative z-10 mx-auto max-w-6xl">
-        {/* =================================================
-            HEADER
-        ================================================= */}
-
-        <div className="mb-6 flex items-center gap-4">
-          <span className="h-[2px] w-10 bg-[#5ee6c9]" />
-
-          <span className="font-[family-name:var(--font-mono)] text-sm font-medium uppercase tracking-[0.35em] text-[#5ee6c9]">
-            {language === "fr" ? "Compétences" : "Skills"}
-          </span>
-        </div>
-
-        <h2 className="max-w-3xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-5xl">
-          {language === "fr" ? <>Les outils avec lesquels <span className="text-[#5ee6c9]">je construis.</span></> : <>The tools I <span className="text-[#5ee6c9]">build with.</span></>}
-        </h2>
-
-        <p className="mt-6 max-w-2xl text-[17px] leading-8 text-white/55">
-          {language === "fr" ? "Une stack construite au fil de mes projets, du développement d'interfaces aux APIs, aux applications mobiles et aux données." : "A toolkit shaped by my projects, from interface development to APIs, mobile applications, and data."}
-        </p>
-
-        {/* =================================================
-            CATEGORIES
-        ================================================= */}
-
-        <div className="mt-14 grid items-start gap-5 md:grid-cols-2">
-           {categories.map((cat, i) => (
-            <div
-              key={cat.title}
-              className={`group relative self-start overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-6 backdrop-blur-md transition-all duration-700 hover:-translate-y-1 hover:border-white/20 md:p-7 ${
-                 isVisible
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-6 opacity-0"
-              }`}
-              style={{
-                transitionDelay: isVisible ? `${i * 100}ms` : "0ms",
-              }}
-            >
-              {/* Glow de catégorie */}
-
-              <div
-                className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-20"
-                style={{
-                  background: cat.color,
-                }}
-              />
-
-              {/* =================================================
-                  CATEGORY HEADER
-              ================================================= */}
-
-              <div className="relative flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  <div
-                    className="flex h-11 w-11 items-center justify-center rounded-xl border"
-                    style={{
-                      color: cat.color,
-                      borderColor: `${cat.color}35`,
-                      backgroundColor: `${cat.color}0d`,
-                    }}
-                  >
-                    {cat.title === "Front-end" && (
-                      <Code2 size={20} strokeWidth={1.7} />
-                    )}
-
-                    {cat.title === "Mobile" && (
-                      <Smartphone size={20} strokeWidth={1.7} />
-                    )}
-
-                    {cat.title === "Back-end" && (
-                      <Server size={20} strokeWidth={1.7} />
-                    )}
-
-                    {cat.title === "Bases de données" && (
-                      <Database size={20} strokeWidth={1.7} />
-                    )}
-
-                    {cat.title === "Outils" && (
-                      <Wrench size={20} strokeWidth={1.7} />
-                    )}
-                  </div>
-
-                  <div>
-                    <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold">
-                      {language === "en" ? (({ "Bases de données": "Databases", "Outils": "Tools" } as Record<string, string>)[cat.title] ?? cat.title) : cat.title}
-                    </h3>
-
-                    <p className="mt-1 text-xs text-white/35">
-                      {language === "en" ? (({ "Interfaces web modernes et expériences interactives.": "Modern web interfaces and interactive experiences.", "APIs, services et logique métier.": "APIs, services, and business logic.", "Stockage, manipulation et accès aux données.": "Data storage, processing, and access.", "Applications mobiles multiplateformes.": "Cross-platform mobile applications.", "Les outils qui structurent mon workflow.": "Tools that shape my workflow." } as Record<string, string>)[cat.description] ?? cat.description) : cat.description}
-                    </p>
-                  </div>
-                </div>
-
-                <span
-                  className="font-[family-name:var(--font-mono)] text-xs tracking-widest"
-                  style={{
-                    color: `${cat.color}99`,
-                  }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
-
-              {/* =================================================
-                  SKILLS
-              ================================================= */}
-
-              <div className="relative mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-                {cat.skills.map((skill) => {
-                  const SkillIcon = skill.icon;
-
-                  return (
-                    <div
-                      key={skill.name}
-                      className="group/skill relative flex min-h-[58px] items-center gap-3 overflow-hidden rounded-xl border bg-white/[0.02] px-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.06]"
-                      style={{
-                        borderColor: `${skill.color}22`,
-                      }}
-                    >
-                      {/* Background de l'outil */}
-
-                      <div
-                        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/skill:opacity-[0.07]"
-                        style={{
-                          background: skill.color,
-                        }}
-                      />
-
-                      {/* Icône */}
-
-                      <div
-                        className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                        style={{
-                          color: skill.color,
-                          backgroundColor: `${skill.color}12`,
-                        }}
-                      >
-                        <SkillIcon size={19} />
-                      </div>
-
-                      {/* Nom */}
-
-                      <span className="relative truncate font-[family-name:var(--font-mono)] text-[11px] font-medium text-white/60 transition-colors duration-300 group-hover/skill:text-white/90">
-                        {skill.name}
-                      </span>
-
-                      {/* Petit indicateur */}
-
-                      <span
-                        className="relative ml-auto h-1.5 w-1.5 shrink-0 rounded-full opacity-40 transition-all duration-300 group-hover/skill:opacity-100"
-                        style={{
-                          background: skill.color,
-                          boxShadow: `0 0 8px ${skill.color}`,
-                        }}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* =================================================
-                  FOOTER
-              ================================================= */}
-
-              <div className="relative mt-6 flex items-center justify-between border-t border-white/[0.07] pt-4">
-                <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-white/25">
-                  Stack
-                </span>
-
-                <span
-                  className="font-[family-name:var(--font-mono)] text-[10px]"
-                  style={{
-                    color: `${cat.color}aa`,
-                  }}
-                >
-                  {String(cat.skills.length).padStart(2, "0")} {language === "fr" ? "technologies" : "technologies"}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-} 
+  return <section id="competences" className="content-section services-section">
+    <div className="services-heading">
+      <div><p className="section-overline">/ {fr ? "CE QUE JE FAIS" : "WHAT I DO"}</p><h2>{fr ? <>Du concept<br />au <span>produit.</span></> : <>From idea<br />to <span>product.</span></>}</h2></div>
+      <p className="section-description">{fr ? "Je réunis design d’interface et ingénierie logicielle pour créer des expériences numériques complètes." : "I bring interface design and software engineering together to create complete digital experiences."}</p>
+    </div>
+    <div className="service-list">
+      {serviceGroups.map(({ title, description, icon: Icon, skills, preview }, index) => <details className="service-row" key={title} style={{ animationDelay: `${index * 90}ms` }}>
+        <summary className="service-summary"><span className="service-number">0{index + 1}</span><span className="service-main"><span className="service-title"><Icon size={18} /><strong>{title}</strong></span><span className="service-description">{description}</span></span><span className="service-stack">{skills.slice(0, 3).map((skill) => <span key={skill.name}>{skill.name}</span>)}<span className="service-more" aria-hidden="true"><ArrowUpRight size={15} /></span></span></summary>
+        <div className="service-expanded"><div className="service-preview"><Image src={preview} alt="" fill sizes="(max-width: 700px) 100vw, 240px" /></div><div><p>{description}</p><div className="service-stack service-expanded-stack">{skills.map((skill) => <span key={skill.name}>{skill.name}</span>)}</div></div></div>
+      </details>)}
+    </div>
+  </section>;
+}

@@ -4,18 +4,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useForm, ValidationError } from "@formspree/react";
-import { SiGithub, SiDiscord } from "react-icons/si";
+import { SiGithub } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
-import { Mail, Send, Loader2, Check, X } from "lucide-react";
+import { ArrowUpRight, Mail, Send, Loader2, Check, X } from "lucide-react";
 import ContactsBackground from "./ContactsBackground";
 import { useLanguage } from "@/src/components/layout/LanguageContext";
-
-type FormErrors = {
-  name?: string;
-  email?: string;
-  subject?: string;
-  message?: string;
-};
+import { validateContactForm, type ContactFormErrors } from "./validateContactForm";
 
 const socials = [
   {
@@ -29,14 +23,15 @@ const socials = [
     label: "LinkedIn",
   },
   {
-    icon: SiDiscord,
-    href: "https://discord.com/channels/@me",
-    label: "Discord",
+    icon: Mail,
+    href: "mailto:tolojanaharyandriatahiana@gmail.com",
+    label: "Email",
   },
 ];
 
 export default function Contact() {
   const { language } = useLanguage();
+  const isFrench = language === "fr";
   // ─────────────────────────────────────────────
   // Formspree
   // ─────────────────────────────────────────────
@@ -53,7 +48,7 @@ export default function Contact() {
     message: "",
   });
 
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [formErrors, setFormErrors] = useState<ContactFormErrors>({});
 
   // ─────────────────────────────────────────────
   // Animation background
@@ -88,44 +83,6 @@ export default function Contact() {
   }, [state.succeeded]);
 
   // ─────────────────────────────────────────────
-  // Validation locale
-  // ─────────────────────────────────────────────
-  const validateForm = (): FormErrors => {
-    const errors: FormErrors = {};
-
-    // Nom
-    if (!formData.name.trim()) {
-      errors.name = "Le nom est requis";
-    } else if (formData.name.trim().length < 2) {
-      errors.name = "Le nom doit contenir au moins 2 caractères";
-    }
-
-    // Email
-    if (!formData.email.trim()) {
-      errors.email = "L'email est requis";
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
-    ) {
-      errors.email = "Email invalide";
-    }
-
-    // Sujet
-    if (!formData.subject.trim()) {
-      errors.subject = "Le sujet est requis";
-    }
-
-    // Message
-    if (!formData.message.trim()) {
-      errors.message = "Le message est requis";
-    } else if (formData.message.trim().length < 10) {
-      errors.message =
-        "Le message doit contenir au moins 10 caractères";
-    }
-
-    return errors;
-  };
-
-  // ─────────────────────────────────────────────
   // Changement des champs
   // ─────────────────────────────────────────────
   const handleChange = (
@@ -138,7 +95,7 @@ export default function Contact() {
       [name]: value,
     }));
 
-    if (formErrors[name as keyof FormErrors]) {
+    if (formErrors[name as keyof ContactFormErrors]) {
       setFormErrors((prev) => ({
         ...prev,
         [name]: "",
@@ -152,7 +109,7 @@ export default function Contact() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const errors = validateForm();
+    const errors = validateContactForm(formData, language);
 
     setFormErrors(errors);
 
@@ -176,86 +133,36 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative min-h-screen overflow-hidden px-6 py-24 text-white"
+      className="contact-section relative min-h-screen overflow-hidden px-6 py-24 text-white"
     >
       <ContactsBackground isVisible={isVisible} />
 
-      <div className="relative z-10 mx-auto max-w-5xl">
-        {/* Header */}
-        <div className="mb-6 flex items-center gap-4">
-          <span className="h-[2px] w-10 bg-[#5ee6c9]" />
-
-          <span className="font-[family-name:var(--font-mono)] text-sm font-medium uppercase tracking-[0.35em] text-[#5ee6c9]">
-            Contact
-          </span>
-        </div>
-
-        <h2 className="max-w-2xl font-[family-name:var(--font-display)] text-3xl font-bold leading-tight md:text-4xl">
-          {language === "fr" ? <>Un projet en tête? <span className="text-[#5ee6c9]">Parlons-en.</span></> : <>Have a project in mind? <span className="text-[#5ee6c9]">Let’s talk.</span></>}
-        </h2>
-
-        <p className="mt-6 max-w-xl text-[17px] leading-8 text-white/65">
-          {language === "fr" ? "Que ce soit pour une opportunité, une collaboration ou juste une question technique, le formulaire ci-dessous m'écrit directement par mail." : "Whether you have an opportunity, want to collaborate, or have a technical question, use the form below to email me directly."}
-        </p>
-
-        <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          {/* ─────────────────────────────────────
-              Coordonnées
-          ───────────────────────────────────── */}
-          <div className="flex flex-col justify-between">
-            <div className="space-y-6">
-              <a
-                href="mailto:tolojanaharyandriatahiana@gmail.com"
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-[#5ee6c9]/40"
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#5ee6c9]/10 text-[#5ee6c9]">
-                  <Mail size={18} />
-                </span>
-
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/40">
-                    Email
-                  </p>
-
-                  <p className="mt-0.5 font-[family-name:var(--font-mono)] text-sm">
-                    tolojanaharyandriatahiana@gmail.com
-                  </p>
-                </div>
-              </a>
-
-              {/* Réseaux */}
-              <div className="flex gap-4">
-                {socials.map(({ icon: Icon, href, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-white/60 transition-all duration-300 hover:border-[#5ee6c9] hover:bg-[#5ee6c9] hover:text-[#0a0e14]"
-                  >
-                    <Icon className="text-lg" />
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Disponibilité */}
-            <div className="mt-10 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 lg:mt-0">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-[#5ee6c9] shadow-[0_0_8px_#5ee6c9]" />
-
-              <p className="text-xs uppercase tracking-[0.2em] text-white/50">
-                {language === "fr" ? "Disponible pour de nouveaux projets" : "Available for new projects"}
-              </p>
-            </div>
+      <div className="contact-layout relative z-10 mx-auto">
+        <div className="contact-copy">
+          <div className="contact-heading">
+            <span aria-hidden="true" />
+            <span>Contact</span>
           </div>
 
-          {/* ─────────────────────────────────────
-              Formulaire
-          ───────────────────────────────────── */}
+          <h2>
+            {language === "fr" ? <>Un projet en tête ? <span>Parlons-en.</span></> : <>Have a project in mind? <span>Let’s talk.</span></>}
+          </h2>
+
+          <p>
+            {language === "fr" ? "Que ce soit pour une opportunité, une collaboration ou une question technique, écris-moi directement." : "Whether you have an opportunity, want to collaborate, or have a technical question, send me a message."}
+          </p>
+
+          <div className="contact-actions">
+            <a href="mailto:tolojanaharyandriatahiana@gmail.com" className="contact-primary">{language === "fr" ? "Parlons de votre projet" : "Let’s collaborate"}<ArrowUpRight size={15} /></a>
+            <div className="contact-social-pills">{socials.map(({ icon: Icon, href, label }) => <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} aria-label={label}><Icon size={13} /><span>{label}</span><ArrowUpRight size={11} /></a>)}</div>
+          </div>
+        </div>
+
+        <div className="contact-form-column">
+          <p className="contact-form-title">{language === "fr" ? "Écrivez-moi un message" : "Send me a message"}</p>
           <form
             onSubmit={onSubmit}
-            className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm sm:p-8"
+            className="contact-form"
           >
             {/* Nom */}
             <div>
@@ -270,6 +177,9 @@ export default function Contact() {
                 id="name"
                 name="name"
                 type="text"
+                autoComplete="name"
+                required
+                aria-invalid={Boolean(formErrors.name)}
                 value={formData.name}
                 onChange={handleChange}
                 placeholder={language === "fr" ? "Votre nom" : "Your name"}
@@ -300,9 +210,12 @@ export default function Contact() {
                 id="email"
                 name="email"
                 type="email"
+                autoComplete="email"
+                required
+                aria-invalid={Boolean(formErrors.email)}
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="vous@exemple.com"
+                placeholder={language === "fr" ? "vous@exemple.com" : "you@example.com"}
                 className={`w-full rounded-xl border ${
                   formErrors.email
                     ? "border-red-400/70"
@@ -336,6 +249,8 @@ export default function Contact() {
                 id="subject"
                 name="subject"
                 type="text"
+                required
+                aria-invalid={Boolean(formErrors.subject)}
                 value={formData.subject}
                 onChange={handleChange}
                 placeholder={language === "fr" ? "Collaboration, opportunité..." : "Collaboration, opportunity..."}
@@ -368,6 +283,8 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 rows={5}
+                required
+                aria-invalid={Boolean(formErrors.message)}
                 placeholder={language === "fr" ? "Décrivez votre projet ou votre question..." : "Describe your project or question..."}
                 className={`w-full resize-none rounded-xl border ${
                   formErrors.message
@@ -418,8 +335,7 @@ export default function Contact() {
               <div className="flex items-center gap-2 rounded-xl border border-[#5ee6c9]/20 bg-[#5ee6c9]/5 px-4 py-3 text-xs text-[#5ee6c9]">
                 <Check size={14} />
                 <span>
-                  Votre message a bien été transmis. Je vous répondrai dans
-                  les plus brefs délais.
+                  {isFrench ? "Votre message a bien été transmis. Je vous répondrai dans les plus brefs délais." : "Your message has been sent. I’ll get back to you as soon as I can."}
                 </span>
               </div>
             )}
@@ -429,8 +345,7 @@ export default function Contact() {
               <div className="flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/5 px-4 py-3 text-xs text-red-400">
                 <X size={14} />
                 <span>
-                  Une erreur est survenue lors de l&apos;envoi. Veuillez
-                  réessayer ou m&apos;écrire directement par email.
+                  {isFrench ? "Une erreur est survenue lors de l’envoi. Veuillez réessayer ou m’écrire directement par email." : "Something went wrong while sending your message. Please try again or email me directly."}
                 </span>
               </div>
             )}

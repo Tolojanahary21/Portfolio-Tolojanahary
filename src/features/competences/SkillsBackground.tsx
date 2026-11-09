@@ -31,7 +31,7 @@ const CLUSTER_COLORS = [
 export default function SkillsBackground({ isVisible }: { isVisible: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const visibleRef = useRef(isVisible);
-  visibleRef.current = isVisible;
+  useEffect(() => { visibleRef.current = isVisible; }, [isVisible]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

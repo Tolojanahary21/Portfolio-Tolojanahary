@@ -15,7 +15,7 @@ type Dot = { x: number; y: number; vx: number; vy: number };
 export default function ContactBackground({ isVisible }: { isVisible: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const visibleRef = useRef(isVisible);
-  visibleRef.current = isVisible;
+  useEffect(() => { visibleRef.current = isVisible; }, [isVisible]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

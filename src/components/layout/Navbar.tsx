@@ -1,170 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
-
-const links = [
-  { name: "Accueil", href: "#accueil" },
-  { name: "Formations", href: "#formations" },
-  { name: "Compétences", href: "#competences" },
-  { name: "Projets", href: "#projets" },
-  { name: "Contact", href: "#contact" },
-];
+import { projects } from "@/src/features/data/projects";
 
 export default function Navbar() {
-  const { language, setLanguage } = useLanguage();
-  const [active, setActive] = useState("Accueil");
+  const { language, setLanguage, theme, toggleTheme } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const handleNavigation = (name: string) => {
-    setActive(name);
-    setMenuOpen(false);
-  };
-  const englishLinkNames: Record<string, string> = { Accueil: "Home", Formations: "Education", "Compétences": "Skills", Projets: "Projects", Contact: "Contact" };
-  const translatedLinks = links.map((link) => ({ ...link, name: language === "en" ? (englishLinkNames[link.name] ?? link.name) : link.name }));
+  const fr = language === "fr";
+  const projectCount = String(projects.length).padStart(2, "0");
+  const links = [
+    { label: fr ? "À propos" : "About", count: "", href: "#apropos" },
+    { label: fr ? "Projets" : "Work", count: projectCount, href: "#projets" },
+    { label: fr ? "Services" : "Services", count: "04", href: "#competences" },
+    { label: fr ? "Expérience" : "Experience", count: "", href: "#formations" },
+    { label: fr ? "Contact" : "Contact", count: "", href: "#contact" },
+  ];
+  const controls = <div className="nav-tools">
+    <button className="language-toggle" type="button" onClick={() => setLanguage(fr ? "en" : "fr")} aria-label={fr ? "Switch to English" : "Passer en français"}>{fr ? "EN" : "FR"}</button>
+    <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={fr ? (theme === "light" ? "Activer le thème sombre" : "Activer le thème clair") : (theme === "light" ? "Switch to dark mode" : "Switch to light mode")} title={fr ? (theme === "light" ? "Thème sombre" : "Thème clair") : (theme === "light" ? "Dark mode" : "Light mode")}>{theme === "light" ? <Moon size={15} /> : <Sun size={15} />}</button>
+  </div>;
 
   return (
-    <header className="fixed left-0 top-0 z-50 w-full px-5 py-5 sm:px-8 lg:px-12">
-      <nav
-        className={`mx-auto flex max-w-7xl items-center justify-between rounded-2xl border px-5 py-3 backdrop-blur-md transition-all duration-300 ${
-          scrolled
-            ? "border-white/15 bg-[#0a0e14]/70 shadow-lg shadow-black/20"
-            : "border-white/10 bg-[#0a0e14]/30"
-        }`}
-      >
-        {/* LOGO */}
-        <a
-          href="#accueil"
-          onClick={() => handleNavigation("Accueil")}
-          className="group relative z-50 font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-white"
-        >
-          tolojanahary
-          <span className="text-[#5ee6c9] transition-colors duration-300 group-hover:text-white">
-            .dev
-          </span>
-        </a>
-
-        {/* NAVIGATION DESKTOP */}
-        <div className="hidden items-center gap-7 md:flex">
-          {translatedLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => handleNavigation(link.name)}
-              aria-current={active === link.name ? "page" : undefined}
-              className={`group relative py-2 text-sm font-medium transition-colors duration-300 ${
-                active === link.name ? "text-white" : "text-white/55 hover:text-white"
-              }`}
-            >
-              {link.name}
-              <span
-                className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-[#5ee6c9] transition-all duration-300 ${
-                  active === link.name ? "w-full" : "w-0 group-hover:w-full"
-                }`}
-              />
-            </a>
-          ))}
+    <header className="site-header">
+      <a className="site-brand" href="#accueil" aria-label="Tolojanahary Stephan — accueil">
+        <span className="site-brand-mark">TS</span>
+        <span className="site-brand-name">Tolojanahary<br /><strong>Stephan</strong></span>
+      </a>
+      <div className="header-status"><span className="status-dot" />{fr ? "Disponible pour de nouveaux projets" : "Available for new projects"}</div>
+      <nav className="site-nav" aria-label={fr ? "Navigation principale" : "Main navigation"}>
+        <div className="nav-links">
+          {links.map((link) => <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>{link.label}{link.count && <small>{link.count}</small>}</a>)}
         </div>
-
-        {/* BOUTON CONTACT DESKTOP */}
-        <a
-          href="#contact"
-          onClick={() => handleNavigation("Contact")}
-          className="hidden rounded-full border border-[#5ee6c9]/40 px-5 py-2 text-sm font-semibold text-[#5ee6c9] transition-all duration-300 hover:border-[#5ee6c9] hover:bg-[#5ee6c9] hover:text-[#0a0e14] md:block"
-        >
-          {language === "fr" ? "Me contacter" : "Contact me"}
-        </a>
-        <button
-          type="button"
-          aria-label={language === "fr" ? "Switch to English" : "Passer en français"}
-          title={language === "fr" ? "Switch to English" : "Passer en français"}
-          onClick={() => setLanguage(language === "fr" ? "en" : "fr")}
-          className="hidden rounded-full border border-white/10 px-3 py-2 text-lg leading-none hover:bg-white/10 md:block"
-        >
-          {language === "fr" ? "🇺🇸" : "🇫🇷"}
-        </button>
-
-        {/* BOUTON MENU MOBILE */}
-        <button
-          type="button"
-          aria-label={menuOpen ? (language === "fr" ? "Fermer le menu" : "Close menu") : (language === "fr" ? "Ouvrir le menu" : "Open menu")}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 md:hidden"
-        >
-          <div className="flex w-5 flex-col gap-1.5">
-            <span
-              className={`block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
-                menuOpen ? "translate-y-[4px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
-                menuOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
-                menuOpen ? "-translate-y-[4px] -rotate-45" : ""
-              }`}
-            />
-          </div>
-        </button>
+        <div className="nav-actions">
+          <a className="nav-contact" href="#contact">{fr ? "Parlons-en" : "Let’s Talk"}<span aria-hidden="true">↗</span></a>
+          {controls}
+        </div>
+        <button type="button" className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? (fr ? "Fermer le menu" : "Close menu") : (fr ? "Ouvrir le menu" : "Open menu")} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button>
       </nav>
-
-      {/* NAVIGATION MOBILE */}
-      <div
-        className={`mx-auto mt-3 max-w-7xl overflow-hidden rounded-2xl border border-white/10 bg-[#0a0e14]/90 backdrop-blur-xl transition-all duration-300 md:hidden ${
-          menuOpen
-            ? "max-h-[400px] translate-y-0 opacity-100"
-            : "pointer-events-none max-h-0 -translate-y-2 opacity-0"
-        }`}
-      >
-        <div className="flex flex-col p-4">
-          {translatedLinks.map((link, index) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => handleNavigation(link.name)}
-              className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
-                active === link.name
-                  ? "bg-white/5 text-[#5ee6c9]"
-                  : "text-white/60 hover:bg-white/5 hover:text-white"
-              }`}
-              style={{ transitionDelay: menuOpen ? `${index * 40}ms` : "0ms" }}
-            >
-              <span>{link.name}</span>
-              {active === link.name && (
-                <span className="h-1.5 w-1.5 rounded-full bg-[#5ee6c9]" />
-              )}
-            </a>
-          ))}
-
-          <a
-            href="#contact"
-            onClick={() => handleNavigation("Contact")}
-            className="mt-2 rounded-xl border border-[#5ee6c9]/40 px-4 py-3 text-center text-sm font-semibold text-[#5ee6c9] transition-all duration-300 hover:bg-[#5ee6c9] hover:text-[#0a0e14]"
-          >
-            {language === "fr" ? "Me contacter" : "Contact me"}
-          </a>
-          <button
-            type="button"
-            aria-label={language === "fr" ? "Switch to English" : "Passer en français"}
-            onClick={() => { setLanguage(language === "fr" ? "en" : "fr"); setMenuOpen(false); }}
-            className="mt-3 flex items-center justify-center rounded-xl border border-white/10 px-4 py-3 text-2xl text-white"
-          >
-            {language === "fr" ? "🇺🇸" : "🇫🇷"}
-          </button>
-        </div>
-      </div>
+      {menuOpen && <div className="mobile-nav">
+        {links.map((link) => <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>{link.label}{link.count && <small>{link.count}</small>}<span aria-hidden="true">↗</span></a>)}
+        <a href="#contact" className="mobile-contact" onClick={() => setMenuOpen(false)}>{fr ? "Parlons-en" : "Let’s Talk"}<span aria-hidden="true">↗</span></a>
+        {controls}
+      </div>}
     </header>
   );
 }

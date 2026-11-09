@@ -1,4 +1,3 @@
- 
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -33,7 +32,7 @@ export default function FormationBackground({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const visibleRef = useRef(isVisible);
 
-  visibleRef.current = isVisible;
+  useEffect(() => { visibleRef.current = isVisible; }, [isVisible]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
