@@ -68,14 +68,14 @@ export default function ContactBackground({ isVisible }: { isVisible: boolean })
         for (const r of rings) {
           const age = (t - r.born) / RING_LIFE;
           const radius = age * MAX_RADIUS;
-          ctx.strokeStyle = `rgba(94,230,201,${0.22 * (1 - age)})`;
+          ctx.strokeStyle = `rgba(167,139,250,${0.22 * (1 - age)})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.arc(cx, cy, radius, 0, Math.PI * 2);
           ctx.stroke();
         }
 
-        ctx.fillStyle = "rgba(94,230,201,0.8)";
+        ctx.fillStyle = "rgba(85,230,208,0.8)";
         ctx.beginPath();
         ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
         ctx.fill();
@@ -86,7 +86,7 @@ export default function ContactBackground({ isVisible }: { isVisible: boolean })
           if (d.x < 0 || d.x > w) d.vx *= -1;
           if (d.y < 0 || d.y > h) d.vy *= -1;
 
-          ctx.fillStyle = "rgba(94,230,201,0.3)";
+          ctx.fillStyle = "rgba(167,139,250,0.3)";
           ctx.beginPath();
           ctx.arc(d.x, d.y, 1.2, 0, Math.PI * 2);
           ctx.fill();
@@ -109,16 +109,16 @@ export default function ContactBackground({ isVisible }: { isVisible: boolean })
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden" style={{ background: "#0a0e14" }}>
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "#09090b" }}>
       <canvas ref={canvasRef} className="absolute inset-0" />
 
       <div
-        className={`pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(94,230,201,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(94,230,201,.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(circle_at_50%_35%,black,transparent_70%)] transition-opacity duration-[1800ms] ${
+        className={`pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(167,139,250,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(85,230,208,.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(circle_at_50%_35%,black,transparent_70%)] transition-opacity duration-[1800ms] ${
           isVisible ? "opacity-100" : "opacity-0"
         }`}
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,rgba(10,14,20,.5)_65%,#0a0e14_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,rgba(9,9,11,.5)_65%,#09090b_100%)]" />
     </div>
   );
 }

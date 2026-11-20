@@ -20,8 +20,8 @@ export default function Hero() {
     <Image className="hero-portrait" src="/Profile.png" alt="Tolojanahary Stephan" width={420} height={520} priority sizes="(max-width: 700px) 190px, 310px" />
     <div className="hero-intro-row">
       <div className="hero-intro">
-        <p className="hero-role">{fr ? "Développeur Full-Stack" : "Full-Stack Developer"}</p>
-        <p className="hero-description">{fr ? "Je conçois des applications web, mobiles et des API, de l’idée jusqu’à la mise en œuvre. Je privilégie les solutions utiles, bien structurées et pensées pour leurs utilisateurs." : "I build web and mobile applications and APIs, from first idea to delivery. My focus is on useful products, thoughtful engineering, and experiences made for people."}</p>
+        <p className="hero-role">{fr ? "Master 1 Informatique · Développeur Full-Stack" : "Master’s student · Full-Stack Developer"}</p>
+        <p className="hero-description">{fr ? "Je conçois des applications web et des outils intelligents, du besoin métier à la mise en production. Mon approche associe ingénierie soignée, interfaces claires et solutions utiles." : "I build web applications and intelligent tools, from business needs through to delivery. My approach combines thoughtful engineering, clear interfaces, and useful solutions."}</p>
         <div className="hero-links">
           <a className="collaborate-link" href="#contact">{fr ? "Parlons de votre projet" : "Let’s work together"}<ArrowUpRight size={15} /></a>
           <a className="resume-link" href="/CV%20Tolojanahary%20Stephan.pdf" download>{fr ? "Télécharger mon CV" : "Download résumé"}<ArrowDown size={13} /></a>
